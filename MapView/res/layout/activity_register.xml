@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#372c24"
+                android:textSize="8pt" 
+                android:text="Full Name"/>
+    <EditText
+                android:id="@+id/FullNameET"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:singleLine="true"
+                android:layout_marginBottom="20dip"/>
+
+    <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#444444"
+                android:textSize="8pt"       
+                android:text="Email"/>
+    <EditText
+                android:id="@+id/EmailET"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:singleLine="true"
+                android:layout_marginBottom="20dip"/>
+    <TextView 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#444444"
+                android:textSize="8pt"
+                android:text="Password"/>
+     <EditText 
+                android:id="@+id/PasswordET"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:password="true"
+                android:singleLine="true"
+                android:layout_marginTop="5dip"/>
+
+    <Button
+        android:id="@+id/BackLoginBT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dip"
+        android:text="Back Login" />
+
+</LinearLayout>

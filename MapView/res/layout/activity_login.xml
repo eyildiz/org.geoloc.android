@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/uname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10pt"
+        android:textColor="#444444"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dip"
+        android:text="User Name:"
+         />
+
+    <EditText
+        android:id="@+id/UserNameET"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_toRightOf="@id/uname"
+        android:layout_alignTop="@id/uname"
+           >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10pt"
+        android:textColor="#444444"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/uname"
+        android:layout_marginRight="9dip"
+        android:layout_marginTop="15dip"
+        android:layout_marginLeft="10dip"
+        android:text="Password:" />
+
+    <EditText
+        android:id="@+id/PasswordET"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_toRightOf="@id/pass"
+        android:layout_alignTop="@id/pass"
+        android:layout_below="@id/UserNameET"
+        android:layout_marginLeft="17dip"
+        android:password="true"  
+        />
+
+    <Button
+        android:id="@+id/LoginBT"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PasswordET"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="15dip"
+        android:layout_marginLeft="110dip"
+        android:text="Login" />
+
+    <Button
+        android:id="@+id/RegisterBT"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoginBT"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:text="Go Register" />
+
+</RelativeLayout>
