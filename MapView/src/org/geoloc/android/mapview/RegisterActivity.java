@@ -36,8 +36,6 @@ public class RegisterActivity extends Activity{
 				new BackgroundProcess("Registering please wait!").execute();
 					
 				}
-				
-				
 			});
 	 }
 
@@ -53,9 +51,7 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 	}
 
 	@Override
-	protected Boolean doInBackground(Boolean... params) {
-		
-		
+	protected Boolean doInBackground(Boolean... params) {		
 		
 		if(FullNameET.getText().toString().equals("")||EmailET.getText().toString().equals("")||PasswordET.getText().toString().equals(""))
 			return Boolean.FALSE;
@@ -81,8 +77,7 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 			newuser.setUserEmail(EmailET.getText().toString());
 			newuser.setUserPassword(PasswordET.getText().toString());
 			TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-			//tm.getDeviceId();
-			Toast.makeText(getApplicationContext(), tm.getDeviceId(), Toast.LENGTH_SHORT).show();
+			newuser.setUserIMEI(Integer.valueOf(tm.getDeviceId()));
 		}
 		else{
 			Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
