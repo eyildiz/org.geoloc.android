@@ -10,54 +10,54 @@ public class User {
 	private double userLatitude;
 	private double userLongitude;
 	private String avatarPath;
-	
-	private int getUserID() {
+	public int getUserID() {
 		return userID;
 	}
-	private void setUserID(int userID) {
+	public void setUserID(int userID) {
 		this.userID = userID;
 	}
-	private String getUsername() {
+	public String getUsername() {
 		return username;
 	}
-	private void setUsername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
-	private String getUserFullName() {
+	public String getUserFullName() {
 		return userFullName;
 	}
-	private void setUserFullName(String userFullName) {
+	public void setUserFullName(String userFullName) {
 		this.userFullName = userFullName;
 	}
-	private String getUserEmail() {
+	public String getUserEmail() {
 		return userEmail;
 	}
-	private void setUserEmail(String userEmail) {
+	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
-	private String getUserPassword() {
+	public String getUserPassword() {
 		return userPassword;
 	}
-	private void setUserPassword(String userPassword) {
+	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
-	private double getUserLatitude() {
+	public double getUserLatitude() {
 		return userLatitude;
 	}
-	private void setUserLatitude(double userLatitude) {
+	public void setUserLatitude(double userLatitude) {
 		this.userLatitude = userLatitude;
 	}
-	private double getUserLongitude() {
+	public double getUserLongitude() {
 		return userLongitude;
 	}
-	private void setUserLongitude(double userLongitude) {
+	public void setUserLongitude(double userLongitude) {
 		this.userLongitude = userLongitude;
 	}
-	private String getAvatarPath() {
+	public String getAvatarPath() {
 		return avatarPath;
 	}
-	private void setAvatarPath(String avatarPath) {
+	public void setAvatarPath(String avatarPath) {
 		this.avatarPath = avatarPath;
 	}
-
+	
+	
 }

@@ -5,51 +5,56 @@
     android:orientation="vertical" >
 
     <TextView 
+                android:id="@+id/FullNameTV"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
                 android:textSize="8pt" 
-                android:text="Full Name"/>
+                android:text="Full Name"
+               />
     <EditText
                 android:id="@+id/FullNameET"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
+                android:layout_height="35dip"          
                 android:singleLine="true"
-                android:layout_marginBottom="20dip"/>
+                android:layout_marginBottom="5dip"
+                android:layout_below="@id/FullNameTV"/>
 
     <TextView 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#444444"
                 android:textSize="8pt"       
-                android:text="Email"/>
+                android:text="Email"
+              />
     <EditText
                 android:id="@+id/EmailET"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
+                android:layout_height="35dip"               
                 android:singleLine="true"
-                android:layout_marginBottom="20dip"/>
+                android:layout_marginBottom="5dip"/>
     <TextView 
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#444444"
                 android:textSize="8pt"
-                android:text="Password"/>
+                android:text="Password"
+              />
      <EditText 
                 android:id="@+id/PasswordET"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="35dip"
                 android:password="true"
-                android:singleLine="true"
-                android:layout_marginTop="5dip"/>
+                android:singleLine="true"            
+                android:layout_marginBottom="5dip"/>
 
     <Button
         android:id="@+id/BackLoginBT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dip"
-        android:text="Back Login" />
+        android:text="Register" 
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"/>
 
 </LinearLayout>
