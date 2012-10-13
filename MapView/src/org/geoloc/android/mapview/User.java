@@ -10,6 +10,7 @@ public class User {
 	private double userLatitude;
 	private double userLongitude;
 	private String avatarPath;
+	private int userIMEI;
 	public int getUserID() {
 		return userID;
 	}
@@ -57,6 +58,12 @@ public class User {
 	}
 	public void setAvatarPath(String avatarPath) {
 		this.avatarPath = avatarPath;
+	}
+	public int getUserIMEI() {
+		return userIMEI;
+	}
+	public void setUserIMEI(int userIMEI) {
+		this.userIMEI = userIMEI;
 	}
 	
 	

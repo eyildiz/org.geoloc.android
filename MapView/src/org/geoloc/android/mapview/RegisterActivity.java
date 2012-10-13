@@ -4,9 +4,11 @@ import org.geoloc.android.mapview.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -78,6 +80,9 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 			newuser.setUserFullName(FullNameET.getText().toString());
 			newuser.setUserEmail(EmailET.getText().toString());
 			newuser.setUserPassword(PasswordET.getText().toString());
+			TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+			//tm.getDeviceId();
+			Toast.makeText(getApplicationContext(), tm.getDeviceId(), Toast.LENGTH_SHORT).show();
 		}
 		else{
 			Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
