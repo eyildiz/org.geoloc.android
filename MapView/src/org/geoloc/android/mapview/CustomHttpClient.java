@@ -73,7 +73,58 @@ public class CustomHttpClient {
 		else
 			return false;
 	}
-	
+	public static boolean registerUser(User user) throws JSONException
+	{
+
+		JSONObject obj = new JSONObject();
+		obj.put("userFullName", user.getUserFullName());
+		obj.put("userEmail", user.getUserEmail());
+		obj.put("userIMEI", user.getUserIMEI());
+		obj.put("userPassword", user.getUserPassword());
+			
+		String JsonStr = obj.toString();
+		Log.d("JsonString", JsonStr);
+		
+		String MethodName = "registerUser";
+		String responseString = "false";
+		
+		HttpParams parameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(parameters, TIMEOUT);
+		HttpConnectionParams.setSoTimeout(parameters, TIMEOUT);
+		
+		HttpClient client = new DefaultHttpClient(parameters);
+		
+		HttpPost request = new HttpPost(URL+MethodName);
+
+		try {
+			request.setEntity(new ByteArrayEntity(JsonStr.getBytes("UTF8")));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			HttpResponse response = client.execute(request);
+			if(response != null){
+				responseString = EntityUtils.toString(response.getEntity());
+				Log.d("JsonString", responseString);
+				
+			}else{
+				Log.d("JsonString", "Request alýnamadý!");
+			}
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+		if(responseString.equals("true"))
+			return true;
+		else
+			return false;
+	}
 
 }
 

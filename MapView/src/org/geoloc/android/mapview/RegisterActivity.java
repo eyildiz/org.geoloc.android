@@ -1,6 +1,7 @@
 package org.geoloc.android.mapview;
 
 import org.geoloc.android.mapview.R;
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -51,12 +52,35 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 	}
 
 	@Override
-	protected Boolean doInBackground(Boolean... params) {		
+	protected Boolean doInBackground(Boolean... params) {	
 		
-		if(FullNameET.getText().toString().equals("")||EmailET.getText().toString().equals("")||PasswordET.getText().toString().equals(""))
-			return Boolean.FALSE;
+		
+		newuser=new User();
+		newuser.setUserFullName(FullNameET.getText().toString());
+		newuser.setUserEmail(EmailET.getText().toString());
+		newuser.setUserPassword(PasswordET.getText().toString());
+		TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+		newuser.setUserIMEI(Integer.valueOf(tm.getDeviceId()));
+		
+		if(FullNameET.getText().toString().equals("")|| EmailET.getText().toString().equals("")||PasswordET.getText().toString().equals(""))
+			Toast.makeText(getApplicationContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show();
 		else
-			return Boolean.TRUE;
+		{
+			Boolean result=null;
+			try {
+				result = CustomHttpClient.registerUser(newuser);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(result != null){
+				return result;
+			}else{
+				Toast.makeText(getApplicationContext(), "Connection error. Please try again.", Toast.LENGTH_SHORT).show();
+			}
+		}
+		return null;	
 
 	}
 
@@ -71,17 +95,15 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 		if(progressDialog.isShowing())
 			progressDialog.dismiss();
 		
-		if(result){
-			newuser=new User();
-			newuser.setUserFullName(FullNameET.getText().toString());
-			newuser.setUserEmail(EmailET.getText().toString());
-			newuser.setUserPassword(PasswordET.getText().toString());
-			TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-			newuser.setUserIMEI(Integer.valueOf(tm.getDeviceId()));
-		}
-		else{
-			Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
-		}
+        if(result!=null)
+        {
+    		if(result){
+    			Toast.makeText(getApplicationContext(), "Registration complicated!", Toast.LENGTH_SHORT).show();
+    		}
+    		else{
+    			Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+    		}
+        }
 		super.onPostExecute(result);
 	}
 
