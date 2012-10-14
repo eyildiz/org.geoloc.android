@@ -1,6 +1,8 @@
 package org.geoloc.android.mapview;
 
 
+import org.json.JSONException;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -69,14 +71,28 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected Boolean doInBackground(Boolean... params) {
-			
-			// Ýleride bu method içinde web service ile kontrol gerçekleþtirecek bir method bulunacak.
-			
-			if(UserNameET.getText().toString().equals(usernameText) && PasswordET.getText().toString().equals(passwordText))
-				return Boolean.TRUE;
-			else
-				return Boolean.FALSE;
-
+		
+			if(UserNameET.getText().toString().equals("") || PasswordET.getText().toString().equals("")){
+				Toast.makeText(getApplicationContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+				
+			}
+			else{
+				Boolean result=null;
+				try {
+					result = CustomHttpClient.checkUser(UserNameET.getText().toString(), PasswordET.getText().toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(result != null){
+					return result;
+				}else{
+					Toast.makeText(getApplicationContext(), "Connection error. Please try again.", Toast.LENGTH_SHORT).show();
+				}
+			}
+		
+		return null;
 		}
 
 		@Override
@@ -90,11 +106,13 @@ public class LoginActivity extends Activity {
 			if(progressDialog.isShowing())
 				progressDialog.dismiss();
 			
-			if(result){
-				Toast.makeText(getApplicationContext(), "Signed in!", Toast.LENGTH_SHORT).show();
-			}
-			else{
-				Toast.makeText(getApplicationContext(), "Please check your username and password.", Toast.LENGTH_SHORT).show();
+			if(result != null){
+				if(result){
+					Toast.makeText(getApplicationContext(), "Signed in!", Toast.LENGTH_SHORT).show();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "Please check your username and password.", Toast.LENGTH_SHORT).show();
+				}
 			}
 			super.onPostExecute(result);
 		}
