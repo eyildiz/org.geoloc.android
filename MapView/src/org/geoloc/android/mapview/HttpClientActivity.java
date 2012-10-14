@@ -22,7 +22,7 @@ public class HttpClientActivity {
 			request.setURI(server);
 			HttpResponse response=client.execute(request);
 			input=new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-			
+			//////////
 			StringBuffer sb=new StringBuffer("");
 			String l="";
 			String newl=System.getProperty("line.separator");
