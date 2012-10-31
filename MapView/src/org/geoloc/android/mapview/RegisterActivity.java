@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -60,7 +61,7 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 		newuser.setUserEmail(EmailET.getText().toString());
 		newuser.setUserPassword(PasswordET.getText().toString());
 		TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		newuser.setUserIMEI(Integer.valueOf(tm.getDeviceId()));
+		newuser.setUserIMEI(Integer.valueOf("1923"));
 		
 		if(FullNameET.getText().toString().equals("")|| EmailET.getText().toString().equals("")||PasswordET.getText().toString().equals(""))
 			Toast.makeText(getApplicationContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show();
@@ -68,13 +69,15 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 		{
 			Boolean result=null;
 			try {
+				Log.d("RegisterBackgroundProcess", "Connecting...");
 				result = CustomHttpClient.registerUser(newuser);
+				Log.d("RegisterBackgroundProcess", "Result ready.");
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			if(result != null){
+				Log.d("RegisterBackgroundProcess", "Result isn't null. Returning...");
 				return result;
 			}else{
 				Toast.makeText(getApplicationContext(), "Connection error. Please try again.", Toast.LENGTH_SHORT).show();
@@ -92,16 +95,21 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 
 	@Override
 	protected void onPostExecute(Boolean result) {
+		Log.d("RegisterBackgroundProcess", "onPostExecute : P.Dialog dismissing.");
 		if(progressDialog.isShowing())
 			progressDialog.dismiss();
+		Log.d("RegisterBackgroundProcess", "onPostExecute : P.Dialog dismissed.");
 		
-        if(result!=null)
+		
+        if(result != null)
         {
     		if(result){
-    			Toast.makeText(getApplicationContext(), "Registration complicated!", Toast.LENGTH_SHORT).show();
+    			Toast.makeText(getApplicationContext(), "Registration completed!", Toast.LENGTH_SHORT).show();
+    			Log.d("RegisterBackgroundProcess", "onPostExecute : Registration successful.");
     		}
     		else{
     			Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+    			Log.d("RegisterBackgroundProcess", "onPostExecute : Registration unsuccessful !");
     		}
         }
 		super.onPostExecute(result);
@@ -109,9 +117,12 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 
 	@Override
 	protected void onPreExecute() {
+		Log.d("RegisterBackgroundProcess", "OnPreExecute starting.");
 		progressDialog.setCancelable(true);
 		progressDialog.setMessage(this.progressMessage);
+		Log.d("RegisterBackgroundProcess", "OnPreExecute settings ready.");
 		progressDialog.show();
+		Log.d("RegisterBackgroundProcess", "OnPreExecute P.Dialog shown");
 		super.onPreExecute();
 	}
 
