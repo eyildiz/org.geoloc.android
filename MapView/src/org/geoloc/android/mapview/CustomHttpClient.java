@@ -142,25 +142,30 @@ public class CustomHttpClient {
 				if(response.getEntity() == null)
 				{
 					Log.d("CustomHTTPClient-RegisterUser", "Response isn't null but response message is empty!");
+					return false;
 				}else{
 					responseString = EntityUtils.toString(response.getEntity());
 					Log.d("CustomHTTPClient-RegisterUser", "Response string ready.");
 					Log.d("CustomHTTPClient-RegisterUser", "Server says : "+responseString);
+					return true;
 				}
 				
 			}else{
 				Log.d("CustomHTTPClient-RegisterUser", "Null Response! May be connection problem occured.");
-			
+				return false;
 			}
 		
 		} catch (ClientProtocolException e) {
 			Log.e("CustomHTTPClient-RegisterUser", "<ERROR> : Protocol Exception");
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			Log.e("CustomHTTPClient-RegisterUser", "<ERROR> : IOException ");
 			e.printStackTrace();
+			return false;
 		}
-		return false;
+		
+		
 	}
 	
 	public static ArrayList<User> getAllUserLocations(){
