@@ -109,6 +109,7 @@ public class LoginActivity extends Activity {
 			if(result != null){
 				if(result){
 					Toast.makeText(getApplicationContext(), "Signed in!", Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(LoginActivity.this,MainActivity.class));
 				}
 				else{
 					Toast.makeText(getApplicationContext(), "Please check your username and password.", Toast.LENGTH_SHORT).show();
