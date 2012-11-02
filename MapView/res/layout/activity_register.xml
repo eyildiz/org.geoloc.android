@@ -1,60 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <TextView 
-                android:id="@+id/FullNameTV"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#372c24"
-                android:textSize="8pt" 
-                android:text="Full Name"
-               />
-    <EditText
-                android:id="@+id/FullNameET"
-                android:layout_width="fill_parent"
-                android:layout_height="35dip"          
-                android:singleLine="true"
-                android:layout_marginBottom="5dip"
-                android:layout_below="@id/FullNameTV"/>
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:weightSum="100"
+        android:orientation="vertical"
+        android:background="#DCCDD4">
+        
+	    <!-- Login Panel -->
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:layout_weight="30"
+	        android:background="@drawable/corner_effect"
+	        android:layout_margin="10dip"
+	        android:orientation="vertical"
+	        android:gravity="center">
+	        
+	        <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/logo"
+	            />
+	        
+	       <EditText 
+	            android:id="@+id/RegisterFullNameET"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="10dip"
+	            android:layout_marginRight="10dip"
+	            android:layout_gravity="center_horizontal"
+	            android:hint="Please enter your full name."
+	            />
+	       
+	        
+            <EditText 
+	            android:id="@+id/RegisterEmailET"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="10dip"
+	            android:layout_marginRight="10dip"
+	            android:layout_gravity="center_horizontal"
+	            android:hint="Please enter your Email."
+	            />
+	       
+	        <EditText 
+        		android:id="@+id/RegisterPasswordET"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="10dip"
+	            android:layout_marginRight="10dip"
+	            android:hint="Please enter a password"
+	            android:layout_gravity="center_horizontal"
 
-    <TextView 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#444444"
-                android:textSize="8pt"       
-                android:text="Email"
-              />
-    <EditText
-                android:id="@+id/EmailET"
-                android:layout_width="fill_parent"
-                android:layout_height="35dip"               
-                android:singleLine="true"
-                android:layout_marginBottom="5dip"/>
-    <TextView 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#444444"
-                android:textSize="8pt"
-                android:text="Password"
-              />
-     <EditText 
-                android:id="@+id/PasswordET"
-                android:layout_width="fill_parent"
-                android:layout_height="35dip"
-                android:password="true"
-                android:singleLine="true"            
-                android:layout_marginBottom="5dip"/>
-
-    <Button
-        android:id="@+id/BackLoginBT"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dip"
-        android:text="Register" 
-        android:layout_marginTop="5dip"
-        android:layout_marginBottom="5dip"/>
+	            />
+	        
+	        <Button
+	            android:id="@+id/RegisterBackLoginBT" 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="10dip"
+	            android:layout_marginRight="10dip"
+	            android:layout_marginTop="15dip"
+	            android:text="Register"
+	            />
+	        
+	    </LinearLayout>
+	  
+    
+    </LinearLayout>
 
 </LinearLayout>

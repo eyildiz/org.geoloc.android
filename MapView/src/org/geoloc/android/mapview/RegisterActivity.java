@@ -27,10 +27,10 @@ public class RegisterActivity extends Activity{
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.activity_register);
 	        
-	        BackLoginBT=(Button)findViewById(R.id.BackLoginBT); 
-	        FullNameET=(EditText)findViewById(R.id.FullNameET);
-	        EmailET=(EditText)findViewById(R.id.EmailET);
-	        PasswordET=(EditText)findViewById(R.id.PasswordET);
+	        BackLoginBT=(Button)findViewById(R.id.RegisterBackLoginBT); 
+	        FullNameET=(EditText)findViewById(R.id.RegisterFullNameET);
+	        EmailET=(EditText)findViewById(R.id.RegisterEmailET);
+	        PasswordET=(EditText)findViewById(R.id.RegisterPasswordET);
 	        
 	        BackLoginBT.setOnClickListener(new View.OnClickListener() {
 				

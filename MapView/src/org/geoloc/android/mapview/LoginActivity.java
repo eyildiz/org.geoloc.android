@@ -29,10 +29,10 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
        
         
-        UserNameET=(EditText)findViewById(R.id.UserNameET);
-        PasswordET=(EditText)findViewById(R.id.PasswordET);
-        LoginBT=(Button)findViewById(R.id.LoginBT);  
-        RegisterBT=(Button)findViewById(R.id.RegisterBT);  
+        UserNameET=(EditText)findViewById(R.id.LoginUserNameET);
+        PasswordET=(EditText)findViewById(R.id.LoginPasswordET);
+        LoginBT=(Button)findViewById(R.id.LoginLoginBT);  
+        RegisterBT=(Button)findViewById(R.id.LoginRegisterBT);  
 		
         RegisterBT.setOnClickListener(new View.OnClickListener() {
 			
