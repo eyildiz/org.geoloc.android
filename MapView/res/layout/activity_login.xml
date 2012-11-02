@@ -8,7 +8,7 @@
         android:layout_height="fill_parent"
         android:weightSum="100"
         android:orientation="vertical"
-        android:background="#DCCDD4">
+        android:background="#000000">
         
 	    <!-- Login Panel -->
 	    <LinearLayout 
@@ -34,6 +34,7 @@
 	            android:layout_marginRight="10dip"
 	            android:layout_gravity="center_horizontal"
 	            android:hint="Please enter a username."
+	            android:textColorHint="#45899c"
 	            />
 
 	        <EditText 
@@ -44,6 +45,7 @@
 	            android:layout_marginRight="10dip"
 	            android:hint="Please enter a password"
 	            android:layout_gravity="center_horizontal"
+	            android:textColorHint="#45899c"
 	            />
 	        
 	        <Button

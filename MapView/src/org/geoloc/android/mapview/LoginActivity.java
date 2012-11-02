@@ -17,12 +17,8 @@ import android.widget.Toast;
 public class LoginActivity extends Activity {
 	EditText UserNameET,PasswordET;
 	Button LoginBT,RegisterBT;
+
 	
-	String usernameText="nagi";
-	String passwordText="adem";
-  
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -122,6 +122,7 @@ public class CustomHttpClient {
 		
 		HttpPost request = new HttpPost(URL+MethodName);
 
+
 		try {
 			Log.d("CustomHTTPClient-RegisterUser", "POST Message attaching to HTTP Post Request...");
 			request.setEntity(new ByteArrayEntity(JsonStr.getBytes("UTF8")));
@@ -168,11 +169,12 @@ public class CustomHttpClient {
 		
 	}
 	
-	public static ArrayList<User> getAllUserLocations(){
+	public static ArrayList<LocationData> getAllUserLocations(){
 		
 		String methodName = "getAllUserLocations";
 		String responseString = null;
 		
+		Log.d("CustomHTTPClient-getAllUserLocations", "Setting Parameters...");
 		HttpParams parameters = new BasicHttpParams();
 		HttpConnectionParams.setConnectionTimeout(parameters, TIMEOUT);
 		HttpConnectionParams.setSoTimeout(parameters, TIMEOUT);
@@ -180,22 +182,75 @@ public class CustomHttpClient {
 		HttpClient client = new DefaultHttpClient(parameters);
 		HttpGet request = new HttpGet(URL+methodName);
 		
-		try {
-			HttpResponse response = client.execute(request);
-			if(response != null){
-				responseString = EntityUtils.toString(response.getEntity());
-				Log.d("getAllUserLocations", responseString);
-			}
-			else{
-				Log.e("getAllUserLocations", "Response is null ! ");
-			}
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Log.d("CustomHTTPClient-getAllUserLocations", "Parameters set.");
 		
-		return null;
+		
+		try {
+			Log.e("CustomHTTPClient-getAllUserLocations", "Request executing, connecting to webservice...");
+			HttpResponse response = client.execute(request);
+			Log.e("CustomHTTPClient-getAllUserLocations", "Execution completed, response ready.");
+			
+			if(response != null){
+				Log.e("CustomHTTPClient-getAllUserLocations", "Response isn't null. Checking response message.");
+				
+				if(response.getEntity() == null)
+				{
+					Log.d("CustomHTTPClient-getAllUserLocations", "Response isn't null but response message is empty!");
+					return null;
+				}else{
+					responseString = EntityUtils.toString(response.getEntity());
+					Log.d("CustomHTTPClient-getAllUserLocations", "Response string ready.");
+					Log.d("CustomHTTPClient-getAllUserLocations", "Server says : "+responseString);
+					
+					
+					try {
+						Log.d("CustomHTTPClient-getAllUserLocations", "JSON Parsing start.");
+						JSONArray allData = new JSONArray(responseString);						
+						
+						
+						ArrayList<LocationData> locations = new ArrayList<LocationData>();
+						
+						for(int i=0; i<allData.length(); i++){
+							
+							JSONObject jsonobj = allData.getJSONObject(i);
+							LocationData location = new LocationData();
+							
+							location.setUserID(jsonobj.getInt("userID"));
+							location.setLatitude(jsonobj.getDouble("latitude"));
+							location.setLongitude(jsonobj.getDouble("longitude"));
+							
+							locations.add(location);
+							
+						}
+						
+						Log.d("CustomHTTPClient-getAllUserLocations", "Parsing completed : ");	
+						Log.d("CustomHTTPClient-getAllUserLocations", "Result : "+allData.length() + " objects.");	
+						
+						return locations;
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return null;
+				}
+				
+			}else{
+				Log.d("CustomHTTPClient-getAllUserLocations", "Null Response! May be connection problem occured.");
+				return null;
+			}
+		
+		} catch (ClientProtocolException e) {
+			Log.e("CustomHTTPClient-getAllUserLocations", "<ERROR> : Protocol Exception");
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			Log.e("CustomHTTPClient-getAllUserLocations", "<ERROR> : IOException ");
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 }
 
