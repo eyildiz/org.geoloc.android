@@ -12,6 +12,16 @@ public class User {
 	private String avatarPath;
 	private int userIMEI;
 	
+	private LocationData userLocation;
+	
+	public LocationData getLocationData(){
+		return userLocation;
+	}
+	
+	public void setLocationData(LocationData loc){
+		this.userLocation  = loc;
+	}
+	
 	public int getUserID() {
 		return userID;
 	}

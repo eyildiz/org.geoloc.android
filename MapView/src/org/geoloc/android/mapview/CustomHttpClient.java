@@ -252,5 +252,97 @@ public class CustomHttpClient {
 		}
 
 	}
+
+	public static ArrayList<User> getAllUsers(){
+		
+		String methodName = "getAllUsers";
+		String responseString = null;
+		
+		Log.d("CustomHTTPClient-getAllUsers", "Setting Parameters...");
+		HttpParams parameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(parameters, TIMEOUT);
+		HttpConnectionParams.setSoTimeout(parameters, TIMEOUT);
+		
+		HttpClient client = new DefaultHttpClient(parameters);
+		HttpGet request = new HttpGet(URL+methodName);
+		
+		Log.d("CustomHTTPClient-getAllUsers", "Parameters set.");
+		
+		
+		try {
+			Log.e("CustomHTTPClient-getAllUsers", "Request executing, connecting to webservice...");
+			HttpResponse response = client.execute(request);
+			Log.e("CustomHTTPClient-getAllUsers", "Execution completed, response ready.");
+			
+			if(response != null){
+				Log.e("CustomHTTPClient-getAllUsers", "Response isn't null. Checking response message.");
+				
+				if(response.getEntity() == null)
+				{
+					Log.d("CustomHTTPClient-getAllUsers", "Response isn't null but response message is empty!");
+					return null;
+				}else{
+					responseString = EntityUtils.toString(response.getEntity());
+					Log.d("CustomHTTPClient-getAllUsers", "Response string ready.");
+					Log.d("CustomHTTPClient-getAllUsers", "Server says : "+responseString);
+					
+					
+					try {
+						Log.d("CustomHTTPClient-getAllUsers", "JSON Parsing start.");
+						JSONArray allData = new JSONArray(responseString);	
+						
+						ArrayList<User> users = new ArrayList<User>();
+						
+						for(int i=0; i<allData.length(); i++){
+							
+							JSONObject JSONObjMember = allData.getJSONObject(i);
+							LocationData location = new LocationData();
+							
+							JSONObject LocationJSONObj =JSONObjMember.getJSONObject("userLocation");
+							
+							location.setUserID(LocationJSONObj.getInt("userID"));
+							location.setLatitude(LocationJSONObj.getDouble("latitude"));
+							location.setLongitude(LocationJSONObj.getDouble("longitude"));
+							
+							User user = new User();
+							user.setLocationData(location);
+							user.setUserPassword(JSONObjMember.getString("passwordHash"));
+							user.setUserID(JSONObjMember.getInt("passwordHash"));
+							user.setUserFullName(JSONObjMember.getString("userFullName"));
+							user.setUserEmail(JSONObjMember.getString("userEmail"));
+							user.setUserIMEI(JSONObjMember.getInt("imei"));
+							
+							users.add(user);
+																					
+						}
+						
+						Log.d("CustomHTTPClient-getAllUsers", "JSON result parse completed.");
+						Log.d("CustomHTTPClient-getAllUsers", "Number of objects : "+users.size());
+						
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return null;
+				}
+				
+			}else{
+				Log.d("CustomHTTPClient-getAllUsers", "Null Response! May be connection problem occured.");
+				return null;
+			}
+		
+		} catch (ClientProtocolException e) {
+			Log.e("CustomHTTPClient-getAllUsers", "<ERROR> : Protocol Exception");
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			Log.e("CustomHTTPClient-getAllUsers", "<ERROR> : IOException ");
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 }
 
