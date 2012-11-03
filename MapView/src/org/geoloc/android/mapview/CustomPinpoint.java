@@ -36,5 +36,9 @@ public class CustomPinpoint extends ItemizedOverlay<OverlayItem> {
 		pinpoints.add(item);
 		this.populate();
 	}
+	
+	public void clearPins(){
+		pinpoints.clear();
+	}
 
 }

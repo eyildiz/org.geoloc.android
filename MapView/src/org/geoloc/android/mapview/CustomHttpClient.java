@@ -26,7 +26,7 @@ import android.util.Log;
 
 public class CustomHttpClient {
 
-	private static  String URL = "http://107.20.156.81:8080/horse-0.0.1-SNAPSHOT/ws/";
+	private static  String URL = "http://107.20.156.81:8080/GeoLocWebServices-0.1/ws/";
 	private static int TIMEOUT = 10000;
 	
 	public static boolean checkUser(String email, String password) throws JSONException{
@@ -312,7 +312,7 @@ public class CustomHttpClient {
 							user.setUserID(JSONObjMember.getInt("userID"));
 							user.setUserFullName(JSONObjMember.getString("userFullName"));
 							user.setUserEmail(JSONObjMember.getString("userEmail"));
-							user.setUserIMEI(JSONObjMember.getInt("imei"));
+							user.setUserIMEI(JSONObjMember.getString("imei"));
 							
 							users.add(user);
 																					
@@ -321,6 +321,7 @@ public class CustomHttpClient {
 						Log.d("CustomHTTPClient-getAllUsers", "JSON result parse completed.");
 						Log.d("CustomHTTPClient-getAllUsers", "Number of objects : "+users.size());
 						
+						return users;
 						
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block

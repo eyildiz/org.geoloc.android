@@ -37,7 +37,7 @@ public class RegisterActivity extends Activity{
 				public void onClick(View arg0) {
 					if(CustomHttpClient.checkInternetConnection(getApplicationContext()))
 					{
-				new BackgroundProcess("Registering please wait!").execute();
+						new BackgroundProcess("Registering please wait!").execute();
 					}
 					else
 					{
@@ -67,8 +67,9 @@ class BackgroundProcess extends AsyncTask<Boolean, String, Boolean>{
 		newuser.setUserFullName(FullNameET.getText().toString());
 		newuser.setUserEmail(EmailET.getText().toString());
 		newuser.setUserPassword(PasswordET.getText().toString());
+		
 		TelephonyManager tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		newuser.setUserIMEI(Integer.valueOf("1923"));
+		newuser.setUserIMEI(tm.getDeviceId());
 		
 		if(FullNameET.getText().toString().equals("")|| EmailET.getText().toString().equals("")||PasswordET.getText().toString().equals(""))
 			Toast.makeText(getApplicationContext(), "Please fill in all fields.", Toast.LENGTH_SHORT).show();

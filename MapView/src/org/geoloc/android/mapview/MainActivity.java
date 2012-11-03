@@ -11,6 +11,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 public class MainActivity extends MapActivity {
 
@@ -37,6 +39,7 @@ public class MainActivity extends MapActivity {
 	Drawable d;
 	GeoPoint touchedPoint;
 	List<Overlay> overlayList ;
+	boolean isrunning = true;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +62,30 @@ public class MainActivity extends MapActivity {
         controller.setZoom(8);
         
         d = getResources().getDrawable(R.drawable.pin);
+                
+        ArrayList<User> users = new ArrayList<User>();
+        users = CustomHttpClient.getAllUsers();
         
-        ArrayList<LocationData> datas = new ArrayList<LocationData>();
-        datas = CustomHttpClient.getAllUserLocations();
-        Log.d("MainAct", "Objects : "+datas.size());
+        for(User user : users){
+        	double latitude = user.getLocationData().latitude;
+        	double longitude = user.getLocationData().longitude;
+        	int userID = user.getUserID();
+        	String userName = user.getUserFullName();
+        	
+        	point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
+			
+        	OverlayItem item = new OverlayItem(point, ""+userID, userName);
+			CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
+			pin.insertPinpoint(item);
+			overlayList.add(pin);
+			
+        }
         
-        CustomHttpClient.getAllUsers();
+        
+        	new UpdateTask().execute();
+   
+        
+        
         
     }
 
@@ -142,6 +163,65 @@ public class MainActivity extends MapActivity {
 		}
 		
 	}
-	
 
+	class UpdateTask extends AsyncTask<String,ArrayList<LocationData>, Void>{
+
+		@Override
+		protected Void doInBackground(String... params) {
+			
+			while(isrunning){
+			try {
+				Log.d("MapAct", "Update started...Thread sleeping now.");
+				Thread.sleep(3000);
+				Log.d("MapAct","Thread woke up");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ArrayList<LocationData> datas = new ArrayList<LocationData>();
+	        datas = CustomHttpClient.getAllUserLocations();
+	        Log.d("MainAct", "Objects : "+datas.size());
+			
+	        publishProgress(datas);
+			}
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(ArrayList<LocationData>... locations) {
+			if(locations != null){
+				overlayList.clear();
+				Gmap.invalidate();
+				overlayList = Gmap.getOverlays();
+				
+		        for(LocationData locs : locations[0]){
+		        	double latitude = locs.getLatitude();
+		        	double longitude = locs.getLongitude();
+		        	int userID = locs.getUserID();
+		        	
+		        	GeoPoint point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
+					
+		        	OverlayItem item = new OverlayItem(point, ""+userID, "usname");
+					CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
+					pin.insertPinpoint(item);
+					overlayList.add(pin);
+					
+		        }
+				
+			}else{
+				Toast.makeText(getApplicationContext(), "Güncel veriler alýnamadý, baðlantýnýzý kontrol ediniz..", Toast.LENGTH_SHORT).show();
+			}
+			super.onProgressUpdate(locations);
+		}
+
+
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+		
+	}
 }
+

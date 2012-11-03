@@ -43,7 +43,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				if(CustomHttpClient.checkInternetConnection(getApplicationContext()))
 				{
-				new BackgroundProcess("Signing in, please wait..").execute();
+					new BackgroundProcess("Signing in, please wait..").execute();
 				}
 				else
 				{
