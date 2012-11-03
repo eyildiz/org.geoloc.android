@@ -307,7 +307,7 @@ public class CustomHttpClient {
 							User user = new User();
 							user.setLocationData(location);
 							user.setUserPassword(JSONObjMember.getString("passwordHash"));
-							user.setUserID(JSONObjMember.getInt("passwordHash"));
+							user.setUserID(JSONObjMember.getInt("userID"));
 							user.setUserFullName(JSONObjMember.getString("userFullName"));
 							user.setUserEmail(JSONObjMember.getString("userEmail"));
 							user.setUserIMEI(JSONObjMember.getInt("imei"));
