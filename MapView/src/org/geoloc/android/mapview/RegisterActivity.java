@@ -35,7 +35,14 @@ public class RegisterActivity extends Activity{
 	        BackLoginBT.setOnClickListener(new View.OnClickListener() {
 				
 				public void onClick(View arg0) {
+					if(CustomHttpClient.checkInternetConnection(getApplicationContext()))
+					{
 				new BackgroundProcess("Registering please wait!").execute();
+					}
+					else
+					{
+						Toast.makeText(getApplicationContext(), "No internet connection.Please check your network settings.", Toast.LENGTH_LONG).show();
+					}
 					
 				}
 			});

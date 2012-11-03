@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 public class CustomHttpClient {
@@ -344,5 +346,17 @@ public class CustomHttpClient {
 		}
 
 	}
+	public static boolean checkInternetConnection(Context c) {
+		ConnectivityManager cm = (ConnectivityManager)c.getSystemService(c.CONNECTIVITY_SERVICE);
+		// test for connection
+		if (cm.getActiveNetworkInfo() != null
+		&& cm.getActiveNetworkInfo().isAvailable()
+		&& cm.getActiveNetworkInfo().isConnected()) {
+		return true;
+		}
+		else {
+		Log.v("Internet", "Internet Connection Not Present");
+		return false;
+		} }
 }
 
