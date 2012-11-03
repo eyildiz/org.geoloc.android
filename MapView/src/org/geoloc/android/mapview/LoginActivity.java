@@ -41,7 +41,14 @@ public class LoginActivity extends Activity {
         LoginBT.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				if(CustomHttpClient.checkInternetConnection(getApplicationContext()))
+				{
 				new BackgroundProcess("Signing in, please wait..").execute();
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), "No internet connection.Please check your internet settings.",Toast.LENGTH_LONG ).show();
+				}
 			}
 		});
         
