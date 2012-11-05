@@ -40,16 +40,20 @@ public class MainActivity extends MapActivity {
 	GeoPoint touchedPoint;
 	List<Overlay> overlayList ;
 	boolean isrunning = true;
+	Touchy t;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        /*
+         *  Google Map View bileþeninin hazýrlanmasý
+         */
         Gmap = (MapView) findViewById(R.id.mapview);
         Gmap.setBuiltInZoomControls(true);
        
-        Touchy t = new Touchy();
+        t = new Touchy();
         overlayList = Gmap.getOverlays();
         overlayList.add(t);
       
@@ -57,12 +61,18 @@ public class MainActivity extends MapActivity {
         overlayList.add(FavoritePlace);
         
         controller = Gmap.getController();
+        /*
+         * KTÜ D Kapýsý Koordinatlarý 
+         */
         GeoPoint point = new GeoPoint(40991204, 39777067);
         controller.animateTo(point);
         controller.setZoom(8);
         
         d = getResources().getDrawable(R.drawable.pin);
-                
+        
+        /*
+         *  Baþlangýçta tüm kullanýcýlarýn servisten alýnmasý
+         */
         ArrayList<User> users = new ArrayList<User>();
         users = CustomHttpClient.getAllUsers();
         
@@ -122,6 +132,9 @@ public class MainActivity extends MapActivity {
 				AlertDialog alert = new AlertDialog.Builder(MainActivity.this).create();
 				alert.setTitle("Options");
 				String option;
+				/*
+				 * Harita uydu modunda ise
+				 */
 				if(Gmap.isSatellite())
 					option = "Street View";
 				else
@@ -148,7 +161,7 @@ public class MainActivity extends MapActivity {
 					
 					public void onClick(DialogInterface dialog, int which) {
 						
-						OverlayItem item = new OverlayItem(touchedPoint, "What'a place", "Snipppet");
+						OverlayItem item = new OverlayItem(touchedPoint, "", "");
 						CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
 						pin.insertPinpoint(item);
 						overlayList.add(pin);
@@ -193,6 +206,7 @@ public class MainActivity extends MapActivity {
 				overlayList.clear();
 				Gmap.invalidate();
 				overlayList = Gmap.getOverlays();
+				overlayList.add(t);
 				
 		        for(LocationData locs : locations[0]){
 		        	double latitude = locs.getLatitude();

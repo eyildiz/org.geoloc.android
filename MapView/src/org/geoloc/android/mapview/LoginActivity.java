@@ -106,6 +106,9 @@ public class LoginActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
+			/*
+			 *  Progress dialog ekranda görüntüleniyorsa dismiss ile durdurulur.
+			 */
 			if(progressDialog.isShowing())
 				progressDialog.dismiss();
 			
@@ -117,13 +120,18 @@ public class LoginActivity extends Activity {
 				else{
 					Toast.makeText(getApplicationContext(), "Please check your username and password.", Toast.LENGTH_SHORT).show();
 				}
+			}else{
+				Toast.makeText(getApplicationContext(), "Connection error.", Toast.LENGTH_SHORT).show();
 			}
 			super.onPostExecute(result);
 		}
 
 		@Override
 		protected void onPreExecute() {
-			progressDialog.setCancelable(true);
+			/*
+			 * setCancelable iþlemin iptal edilebilirliðini belirler.
+			 */
+			progressDialog.setCancelable(true); 
 			progressDialog.setMessage(this.progressMessage);
 			progressDialog.show();
 			super.onPreExecute();
