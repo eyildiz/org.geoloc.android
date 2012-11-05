@@ -49,6 +49,7 @@
 	            android:hint="Please enter a password"
 	            android:layout_gravity="center_horizontal"
 	            android:textColorHint="#45899c"
+	            android:inputType="textPassword"
 	            />
 	        
 	        <Button

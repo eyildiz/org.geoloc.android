@@ -84,7 +84,6 @@ public class LoginActivity extends Activity {
 				try {
 					result = CustomHttpClient.checkUser(UserNameET.getText().toString(), PasswordET.getText().toString());
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				

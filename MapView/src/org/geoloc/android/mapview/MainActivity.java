@@ -26,6 +26,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
@@ -40,7 +42,7 @@ public class MainActivity extends MapActivity {
 	GeoPoint touchedPoint;
 	List<Overlay> overlayList ;
 	boolean isrunning = true;
-	Touchy t;
+	ArrayList<User> users;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,8 @@ public class MainActivity extends MapActivity {
          */
         Gmap = (MapView) findViewById(R.id.mapview);
         Gmap.setBuiltInZoomControls(true);
-       
-        t = new Touchy();
+   
         overlayList = Gmap.getOverlays();
-        overlayList.add(t);
       
         FavoritePlace = new MyLocationOverlay(MainActivity.this, Gmap);
         overlayList.add(FavoritePlace);
@@ -73,37 +73,67 @@ public class MainActivity extends MapActivity {
         /*
          *  Baþlangýçta tüm kullanýcýlarýn servisten alýnmasý
          */
-        ArrayList<User> users = new ArrayList<User>();
-        users = CustomHttpClient.getAllUsers();
+        users = new ArrayList<User>();
+        new InitializeTask().execute();
         
-        for(User user : users){
-        	double latitude = user.getLocationData().latitude;
-        	double longitude = user.getLocationData().longitude;
-        	int userID = user.getUserID();
-        	String userName = user.getUserFullName();
-        	
-        	point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
-			
-        	OverlayItem item = new OverlayItem(point, ""+userID, userName);
-			CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
-			pin.insertPinpoint(item);
-			overlayList.add(pin);
-			
+        if(users != null)
+        {
+	        for(User user : users){
+	        	double latitude = user.getLocationData().latitude;
+	        	double longitude = user.getLocationData().longitude;
+	        	int userID = user.getUserID();
+	        	String userName = user.getUserFullName();
+	        	
+	        	point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
+				
+	        	OverlayItem item = new OverlayItem(point, ""+userID, userName);
+				CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
+				pin.insertPinpoint(item);
+				overlayList.add(pin);
+				
+	        }
+	                
+	        	new UpdateTask().execute();
+        
+        }else{
+        	Toast.makeText(getApplicationContext(), "Connection error. Couldn't get users.", Toast.LENGTH_SHORT).show();
         }
-        
-        
-        	new UpdateTask().execute();
-   //
-        
         
         
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_login, menu);
+    	
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.activity_login, menu);
+    	
         return true;
     }
+
+    
+    
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch(item.getItemId()){
+		case R.id.About:
+			break;
+		
+		case R.id.Terrain:
+			if(Gmap.isSatellite()){
+				Gmap.setSatellite(false);
+				Gmap.setStreetView(true);
+			}else
+			{
+				Gmap.setStreetView(false);
+				Gmap.setSatellite(true);
+			}
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -111,72 +141,16 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 	
-	class Touchy extends Overlay{
+	class InitializeTask extends AsyncTask<String, String, String>{
 
 		@Override
-		public boolean onTouchEvent(MotionEvent e, MapView mapView) {
-			
-			if(e.getAction() == MotionEvent.ACTION_DOWN){
-				start = e.getEventTime();
-				x = (int) e.getX();
-				y = (int) e.getY();
-				
-				touchedPoint = mapView.getProjection().fromPixels(x, y);
-			}
-			
-			if(e.getAction() == MotionEvent.ACTION_UP){
-				stop = e.getEventTime();
-			}
-			
-			if((stop - start) > 1500){
-				AlertDialog alert = new AlertDialog.Builder(MainActivity.this).create();
-				alert.setTitle("Options");
-				String option;
-				/*
-				 * Harita uydu modunda ise
-				 */
-				if(Gmap.isSatellite())
-					option = "Street View";
-				else
-					option = "Satellite View";
-				
-				alert.setButton(option, new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						if(Gmap.isSatellite()){
-							Gmap.setSatellite(false);
-							Gmap.setStreetView(true);
-						}else
-						{
-							Gmap.setStreetView(false);
-							Gmap.setSatellite(true);
-						}
-						
-						
-						
-					}
-				});
-				
-				alert.setButton2("Place a pin", new DialogInterface.OnClickListener() {
-					
-					public void onClick(DialogInterface dialog, int which) {
-						
-						OverlayItem item = new OverlayItem(touchedPoint, "", "");
-						CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
-						pin.insertPinpoint(item);
-						overlayList.add(pin);
-					}
-				});
-				
-			alert.show();
-			
-			}
-			
-			return false;
+		protected String doInBackground(String... params) {
+			users = CustomHttpClient.getAllUsers();
+			return null;
 		}
 		
 	}
-
+	
 	class UpdateTask extends AsyncTask<String,ArrayList<LocationData>, Void>{
 
 		@Override
@@ -193,20 +167,25 @@ public class MainActivity extends MapActivity {
 			}
 			ArrayList<LocationData> datas = new ArrayList<LocationData>();
 	        datas = CustomHttpClient.getAllUserLocations();
-	        Log.d("MainAct", "Objects : "+datas.size());
-			
-	        publishProgress(datas);
-			}
+	        
+		        if(datas != null){
+		        	Log.d("MainAct", "Objects : "+datas.size());
+		        }else{
+		        	Log.d("MainAct", "Objects : "+" 0 - No Data");
+		        }
+		        publishProgress(datas);
+				}
 			return null;
 		}
 
 		@Override
 		protected void onProgressUpdate(ArrayList<LocationData>... locations) {
+			
 			if(locations != null){
+				
 				overlayList.clear();
 				Gmap.invalidate();
 				overlayList = Gmap.getOverlays();
-				overlayList.add(t);
 				
 		        for(LocationData locs : locations[0]){
 		        	double latitude = locs.getLatitude();

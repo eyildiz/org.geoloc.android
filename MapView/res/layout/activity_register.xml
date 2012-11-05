@@ -54,6 +54,7 @@
 	            android:layout_marginLeft="10dip"
 	            android:layout_marginRight="10dip"
 	            android:hint="Please enter a password"
+	            android:inputType="textPassword"
 	            android:layout_gravity="center_horizontal"
 
 	            />
