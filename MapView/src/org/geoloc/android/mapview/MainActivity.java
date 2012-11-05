@@ -83,7 +83,7 @@ public class MainActivity extends MapActivity {
         
         
         	new UpdateTask().execute();
-   
+   //
         
         
         
