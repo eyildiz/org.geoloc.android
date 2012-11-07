@@ -347,6 +347,7 @@ public class CustomHttpClient {
 		}
 
 	}
+	
 	public static boolean checkInternetConnection(Context c) {
 		ConnectivityManager cm = (ConnectivityManager)c.getSystemService(c.CONNECTIVITY_SERVICE);
 		// test for connection

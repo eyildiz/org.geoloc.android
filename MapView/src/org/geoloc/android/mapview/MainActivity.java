@@ -34,7 +34,6 @@ import android.widget.Toast;
 public class MainActivity extends MapActivity {
 
 	MapView Gmap;
-	MyLocationOverlay FavoritePlace;
 	MapController controller;
 	long start,stop;
 	int x,y;
@@ -56,11 +55,9 @@ public class MainActivity extends MapActivity {
         Gmap.setBuiltInZoomControls(true);
    
         overlayList = Gmap.getOverlays();
-      
-        FavoritePlace = new MyLocationOverlay(MainActivity.this, Gmap);
-        overlayList.add(FavoritePlace);
-        
+              
         controller = Gmap.getController();
+        
         /*
          * KTÜ D Kapýsý Koordinatlarý 
          */
@@ -102,6 +99,9 @@ public class MainActivity extends MapActivity {
         
     }
 
+    /*
+     *  Menü tuþuna dokunulduðunda gösterilecek seçenekler.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	
@@ -117,19 +117,20 @@ public class MainActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch(item.getItemId()){
-		case R.id.About:
-			break;
 		
-		case R.id.Terrain:
-			if(Gmap.isSatellite()){
-				Gmap.setSatellite(false);
-				Gmap.setStreetView(true);
-			}else
-			{
-				Gmap.setStreetView(false);
-				Gmap.setSatellite(true);
-			}
-			break;
+			case R.id.About:
+				break;
+			
+			case R.id.Terrain:
+				if(Gmap.isSatellite()){
+					Gmap.setSatellite(false);
+					Gmap.setStreetView(true);
+				}else
+				{
+					Gmap.setStreetView(false);
+					Gmap.setSatellite(true);
+				}
+				break;
 		}
 		
 		return super.onOptionsItemSelected(item);
