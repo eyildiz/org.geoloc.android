@@ -1,7 +1,9 @@
 package org.geoloc.android.mapview;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -10,6 +12,8 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.readystatesoftware.maps.OnSingleTapListener;
+import com.readystatesoftware.maps.TapControlledMapView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,9 +37,16 @@ import android.widget.Toast;
 
 public class MainActivity extends MapActivity {
 
-	MapView Gmap;
+	TapControlledMapView Gmap;
 	MapController controller;
-	long start,stop;
+
+	List<Overlay> mapOverlays;
+	SimpleItemizedOverlay itemizedOverlay;
+	Drawable pin;
+	
+	Hashtable userNames;
+	Hashtable userMails;
+	
 	int x,y;
 	Drawable d;
 	GeoPoint touchedPoint;
@@ -48,55 +59,38 @@ public class MainActivity extends MapActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        /*
-         *  Google Map View bileþeninin hazýrlanmasý
-         */
-        Gmap = (MapView) findViewById(R.id.mapview);
+        Gmap = (TapControlledMapView) findViewById(R.id.mapview);
         Gmap.setBuiltInZoomControls(true);
-   
-        overlayList = Gmap.getOverlays();
-              
-        controller = Gmap.getController();
         
-        /*
-         * KTÜ D Kapýsý Koordinatlarý 
-         */
-        GeoPoint point = new GeoPoint(40991204, 39777067);
-        controller.animateTo(point);
-        controller.setZoom(8);
+        Gmap.setOnSingleTapListener(new OnSingleTapListener() {
+			
+			public boolean onSingleTap(MotionEvent e) {
+				itemizedOverlay.hideAllBalloons();
+				return true;
+			}
+		});
         
-        d = getResources().getDrawable(R.drawable.pin);
+        mapOverlays = Gmap.getOverlays();
+        pin = getResources().getDrawable(R.drawable.pin);
+        itemizedOverlay = new SimpleItemizedOverlay(pin, Gmap);
         
-        /*
-         *  Baþlangýçta tüm kullanýcýlarýn servisten alýnmasý
-         */
+		// set iOS behavior attributes for overlay
+		itemizedOverlay.setShowClose(false);
+		itemizedOverlay.setShowDisclosure(true);
+		itemizedOverlay.setSnapToCenter(true);
+		
+		userNames = new Hashtable<Integer, String>();
+		userMails = new Hashtable<Integer, String>();
+		
+		GeoPoint initalPoint = new GeoPoint(40991204, 39777067);
+		OverlayItem item = new OverlayItem(initalPoint, "D Kapýsý", "Konaklar");
+		itemizedOverlay.addOverlay(item);
+
         users = new ArrayList<User>();
         new InitializeTask().execute();
-        
-        if(users != null)
-        {
-	        for(User user : users){
-	        	double latitude = user.getLocationData().latitude;
-	        	double longitude = user.getLocationData().longitude;
-	        	int userID = user.getUserID();
-	        	String userName = user.getUserFullName();
-	        	
-	        	point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
-				
-	        	OverlayItem item = new OverlayItem(point, ""+userID, userName);
-				CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
-				pin.insertPinpoint(item);
-				overlayList.add(pin);
-				
-	        }
-	                
-	        	new UpdateTask().execute();
-        
-        }else{
-        	Toast.makeText(getApplicationContext(), "Connection error. Couldn't get users.", Toast.LENGTH_SHORT).show();
-        }
-        
-        
+
+        new UpdateTask().execute();
+		    
     }
 
     /*
@@ -149,6 +143,50 @@ public class MainActivity extends MapActivity {
 			users = CustomHttpClient.getAllUsers();
 			return null;
 		}
+
+		@Override
+		protected void onPostExecute(String result) {
+	        
+	        Log.d("Baloon Operations", "Users Json Alýndý : "+users.size());
+	        
+	        if(users != null)
+	        {
+		        for(User user : users){
+		        	double latitude = user.getLocationData().latitude;
+		        	double longitude = user.getLocationData().longitude;
+		        	int userID = user.getUserID();
+		        	
+		        	Log.d("Baloon Operations", "Döngü : Lat:"+latitude+" Lon:"+longitude+ "user:"+userID);
+		        	
+		        	String userName = user.getUserFullName();
+		        	String userEmail = user.getUserEmail();
+		        	
+		        	GeoPoint point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
+					
+		        	OverlayItem itemtemp = new OverlayItem(point, userName, userEmail);
+		        	
+		        	Log.d("Baloon Operations", "overlay item oluþturuldu.");
+		        	
+		        	itemizedOverlay.addOverlay(itemtemp);
+		        	
+		        	Log.d("Baloon Operations", "overlay item eklendi.");
+					
+		        	 //userNames.put(userID, userName);
+					//userMails.put(userID, userEmail);
+		        }
+		        
+		        mapOverlays.add(itemizedOverlay);
+		        Log.d("Baloon Operations", "Map Overlays içine alýndý."+mapOverlays.size());
+		        
+		        //new UpdateTask().execute();
+	        
+	        }else{
+	        	Toast.makeText(getApplicationContext(), "Connection error. Couldn't get users.", Toast.LENGTH_SHORT).show();
+	        }
+			super.onPostExecute(result);
+		}
+		
+		
 		
 	}
 	
@@ -183,24 +221,24 @@ public class MainActivity extends MapActivity {
 		protected void onProgressUpdate(ArrayList<LocationData>... locations) {
 			
 			if(locations != null){
+				SimpleItemizedOverlay tempItemizedOverlay;
+				tempItemizedOverlay = new SimpleItemizedOverlay(pin, Gmap);
 				
-				overlayList.clear();
+				mapOverlays.clear();
 				Gmap.invalidate();
-				overlayList = Gmap.getOverlays();
+				mapOverlays = Gmap.getOverlays();
 				
 		        for(LocationData locs : locations[0]){
 		        	double latitude = locs.getLatitude();
 		        	double longitude = locs.getLongitude();
 		        	int userID = locs.getUserID();
 		        	
-		        	GeoPoint point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );
-					
-		        	OverlayItem item = new OverlayItem(point, ""+userID, "usname");
-					CustomPinpoint pin = new CustomPinpoint(d,MainActivity.this);
-					pin.insertPinpoint(item);
-					overlayList.add(pin);
-					
+		        	GeoPoint point = new GeoPoint( (int) (latitude*1E6) , (int) (longitude*1E6) );					
+		        	OverlayItem item = new OverlayItem(point, (String)userNames.get(userID) , (String)userMails.get(userID));
+		        	tempItemizedOverlay.addOverlay(item);					
 		        }
+		        
+		        mapOverlays.add(itemizedOverlay);
 				
 			}else{
 				Toast.makeText(getApplicationContext(), "Güncel veriler alýnamadý, baðlantýnýzý kontrol ediniz..", Toast.LENGTH_SHORT).show();
@@ -217,5 +255,9 @@ public class MainActivity extends MapActivity {
 		}
 		
 	}
+
+
+
+	
 }
 

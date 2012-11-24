@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package org.geoloc.android.mapview;
+package com.readystatesoftware.mapviewballoons;
 
 public final class R {
     public static final class attr {
