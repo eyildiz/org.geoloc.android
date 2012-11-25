@@ -15,10 +15,16 @@
 
 package org.geoloc.android.mapview;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.maps.MapView;
@@ -53,9 +59,40 @@ public class SimpleItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 
 	@Override
 	protected boolean onBalloonTap(int index, OverlayItem item) {
-		Toast.makeText(c, "onBalloonTap for overlay index " + index,
-				Toast.LENGTH_LONG).show();
+	//	Toast.makeText(c, "onBalloonTap for overlay index " + index,
+	//			Toast.LENGTH_LONG).show();
 		
+		Geocoder geocoder = new Geocoder(c,Locale.ENGLISH);
+		String addr;
+		Log.d("Geocode", item.getPoint().getLongitudeE6()/1E6+ " ||||| "+item.getPoint().getLongitudeE6()*1E6 );
+		
+		try {
+			List<Address> addresses = geocoder.getFromLocation(item.getPoint().getLatitudeE6()/1E6, item.getPoint().getLongitudeE6()/1E6, 1);
+		
+			if(addresses != null){
+				
+				   Address returnedAddress = addresses.get(0);
+				   StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
+				   for(int i=0; i<returnedAddress.getMaxAddressLineIndex(); i++) {
+				    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+				   }
+			addr = strReturnedAddress.toString();	
+			}
+			else{				
+			addr = "Bu nokta için adres alýnamadý";	
+			}
+			
+		} catch (IOException e) {
+			addr = "Bu nokta için adres alýnamadý.";
+			e.printStackTrace();
+		}
+		
+		if(addr == null){
+			addr = "Bu nokta için adres alýnamadý.";
+		}
+		
+		Toast.makeText(c, "Nerede ? : "+addr,
+				Toast.LENGTH_LONG).show();
 		
 		return true;
 	}
