@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ public class LoginActivity extends Activity {
 	EditText UserNameET,PasswordET;
 	Button LoginBT,RegisterBT;
 
+	public static final String PrefFile = "PreferenceVars";
+	public static final String PrefUser = "PreferenceUserVar";
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,11 @@ public class LoginActivity extends Activity {
         PasswordET=(EditText)findViewById(R.id.LoginPasswordET);
         LoginBT=(Button)findViewById(R.id.LoginLoginBT);  
         RegisterBT=(Button)findViewById(R.id.LoginRegisterBT);  
+        
+        SharedPreferences prf = getSharedPreferences(PrefFile, MODE_PRIVATE);
+        String usernameInFile = prf.getString(PrefUser, "");
+        
+        UserNameET.setText(usernameInFile);
 		
         RegisterBT.setOnClickListener(new View.OnClickListener() {
 			
@@ -43,6 +51,12 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				if(CustomHttpClient.checkInternetConnection(getApplicationContext()))
 				{
+					
+					getSharedPreferences(PrefFile, MODE_PRIVATE)
+					.edit()
+					.putString(PrefUser, UserNameET.getText().toString())
+					.commit();
+										
 					new BackgroundProcess("Signing in, please wait..").execute();
 				}
 				else
@@ -55,6 +69,12 @@ public class LoginActivity extends Activity {
     }
 
     @Override
+	protected void onPause() {
+		finish();
+		super.onPause();
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_login, menu);
         return true;
